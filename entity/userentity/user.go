@@ -44,3 +44,17 @@ func UserRequestValidate(ur *UserRequest) error {
 
 	return err.Filter()
 }
+
+// FindUser is struct to handle respone while find user by ID
+type FindUser struct {
+	Firstname string `json:"first_name"`
+	Lastname  string `json:"last_name"`
+	Phone     string `json:"phone_number"`
+	Avatar    string `json:"avatar"`
+	Email     string `json:"email"`
+	Username  string `json:"username"`
+	Password  string `json:"password"`
+	Status    string `json:"status"`
+	CreatedAt string `json:"created_at"`
+	UpdatedAt string `json:"updated_at"`
+}

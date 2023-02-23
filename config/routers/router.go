@@ -25,6 +25,7 @@ func (se *Serve) initializeRoutes() {
 
 	//=== USER ===
 	se.Router.HandleFunc("/user", h.RegisterNewUser).Methods("POST")
+	se.Router.HandleFunc("/user/{id}/find", h.FindUserByUserID).Methods("GET")
 	//==========================================================
 
 }

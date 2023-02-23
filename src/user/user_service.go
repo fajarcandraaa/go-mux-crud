@@ -51,3 +51,26 @@ func (s *service) InsertNewUser(ctx context.Context, payload *userentity.UserReq
 
 	return user, nil
 }
+
+func (s *service) FindUser(ctx context.Context, userID string) (*userentity.FindUser, error) {
+
+	user, err := s.repo.User.FindUserByID(ctx, userID)
+	if err != nil {
+		return nil, err
+	}
+
+	resultUser := userentity.FindUser{
+		Firstname: user.Firstname,
+		Lastname:  user.Lastname,
+		Phone:     user.Phone,
+		Avatar:    user.Avatar,
+		Email:     user.Email,
+		Username:  user.Username,
+		Password:  user.Password,
+		Status:    user.Status,
+		CreatedAt: user.CreatedAt.String(),
+		UpdatedAt: user.UpdatedAt.String(),
+	}
+
+	return &resultUser, nil
+}
