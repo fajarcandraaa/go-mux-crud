@@ -14,5 +14,5 @@ We will learn about implementing CRUD using Golang REST API  and Gorilla Mux for
 	 - Get By ID
 	 - Get All
 	 - Update
-	 - Delete
+	 - Delete (we don't use delete like destroy data in here, but we use status like active/inactive to keep the data traceable)
 - Testing CRUD Operations
