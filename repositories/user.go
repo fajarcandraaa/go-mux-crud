@@ -10,6 +10,7 @@ import (
 
 type User interface {
 	SaveNewUser(ctx context.Context, payload *userentity.User) error
+	FindUserByID(ctx context.Context, userID string) (*userentity.User, error)
 }
 
 func NewUser(db *gorm.DB) User {

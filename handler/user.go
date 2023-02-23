@@ -10,6 +10,7 @@ import (
 	"github.com/fajarcandraaa/go-mux-crud/entity/userentity"
 	"github.com/fajarcandraaa/go-mux-crud/helpers"
 	"github.com/fajarcandraaa/go-mux-crud/src/user"
+	"github.com/gorilla/mux"
 	"github.com/pkg/errors"
 )
 
@@ -53,5 +54,29 @@ func (uh *UserHandler) RegisterNewUser(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 	responder.SuccessJSON(w, newUser, http.StatusCreated, "Succes to register new user")
+	return
+}
+
+func (ud *UserHandler) FindUserByUserID(w http.ResponseWriter, r *http.Request) {
+	var (
+		userID    = mux.Vars(r)["id"]
+		responder = helpers.NewHTTPResponse("registerNewUser")
+		ctx       = r.Context()
+	)
+
+	findUser, err := ud.service.FindUser(ctx, userID)
+	if err != nil {
+		causer := errors.Cause(err)
+		switch causer {
+		case entity.ErrUserNotExist:
+			responder.ErrorJSON(w, http.StatusNotFound, "user not found")
+			return
+		default:
+			responder.FailureJSON(w, err, http.StatusInternalServerError)
+			return
+		}
+	}
+
+	responder.SuccessJSON(w, findUser, http.StatusOK, "User found")
 	return
 }
