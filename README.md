@@ -1,8 +1,8 @@
-# CRUD GoLang REST API with Mux, GORM & Meta Pagination
+# Boilerplate of Go - CRUD GoLang REST API with Mux, GORM & Meta Pagination
 
-![CRUD GoLang REST API with Mux, GORM & Meta Pagination](https://miro.medium.com/max/1400/0*ck-mgOkywViHkZx2.png)
+![Boilerplate of Go - CRUD GoLang REST API with Mux, GORM & Meta Pagination](https://miro.medium.com/max/1400/0*ck-mgOkywViHkZx2.png)
 
-We will learn about implementing CRUD using Golang REST API  and Gorilla Mux for routing requests, GORM to access the database, and we can use PostgreSQL or MySQL as the database provider.
+We will learn about implementing boilerplate of golang, CRUD using Golang REST API and Gorilla Mux for routing requests, GORM to access the database, and we can use PostgreSQL or MySQL as the database provider.
 
 ## Topics :
 - Setting up the Golang Project
