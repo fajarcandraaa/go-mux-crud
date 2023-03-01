@@ -1,8 +1,8 @@
 package routers
 
 import (
-	"github.com/fajarcandraaa/go-mux-crud/handler"
-	"github.com/fajarcandraaa/go-mux-crud/repositories"
+	repositories "github.com/fajarcandraaa/go-mux-crud/model"
+	"github.com/fajarcandraaa/go-mux-crud/route"
 	"github.com/fajarcandraaa/go-mux-crud/src/user"
 )
 
@@ -17,15 +17,18 @@ func (se *Serve) initializeRoutes() {
 
 	//=== USER ===
 	s := user.NewService(r)
-	h := handler.NewUserHandler(s)
+	h := route.NewUserHandler(s)
 	//=========================================================
 
 	//======================== ENDPOINT ========================
 	//Initialize endpoint route
 
 	//=== USER ===
-	se.Router.HandleFunc("/user", h.RegisterNewUser).Methods("POST")
+	se.Router.HandleFunc("/user/create", h.RegisterNewUser).Methods("POST")
 	se.Router.HandleFunc("/user/{id}/find", h.FindUserByUserID).Methods("GET")
+	se.Router.HandleFunc("/user", h.GetUsers).Methods("GET")
+	se.Router.HandleFunc("/user", h.UpdateDataUsers).Methods("PUT")
+	se.Router.HandleFunc("/user/{id}", h.UserDelete).Methods("DELETE")
 	//==========================================================
 
 }

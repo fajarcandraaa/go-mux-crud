@@ -7,7 +7,7 @@ import (
 	"os"
 
 	"github.com/fajarcandraaa/go-mux-crud/config/app"
-	"github.com/fajarcandraaa/go-mux-crud/handler"
+	"github.com/fajarcandraaa/go-mux-crud/route"
 	"github.com/fajarcandraaa/go-mux-crud/src"
 	"github.com/gorilla/mux"
 	"github.com/jinzhu/gorm"
@@ -18,7 +18,7 @@ import (
 
 type Service struct {
 	Home *src.Home
-	User *handler.UserHandler
+	User *route.UserHandler
 }
 
 type Serve struct {

@@ -3,7 +3,9 @@ package helpers
 import (
 	"encoding/json"
 	"fmt"
+	"math"
 	"net/http"
+	"strconv"
 	"strings"
 )
 
@@ -32,6 +34,70 @@ type APISuccess struct {
 	*API
 	Meta interface{} `json:"meta,omitempty"`
 	Data interface{} `json:"data,omitempty"`
+}
+
+type PaginationParams struct {
+	Path        string
+	Page        string
+	TotalRows   int32
+	TotalPages  int32
+	PerPage     int32
+	OrderBy     string
+	SortBy      string
+	CurrentPage int32
+}
+
+// GetPagination to set pagination
+func GetPagination(params PaginationParams) (PaginationParams, error) {
+
+	totalPages := int32(math.Ceil(float64(params.TotalRows) / float64(params.PerPage)))
+
+	return PaginationParams{
+		Path:        params.Path,
+		Page:        params.Page,
+		TotalRows:   params.TotalRows,
+		TotalPages:  totalPages,
+		PerPage:     params.PerPage,
+		OrderBy:     params.OrderBy,
+		SortBy:      params.SortBy,
+		CurrentPage: params.CurrentPage,
+	}, nil
+}
+
+// SetDefaultPginationParam to set parametes of pagination
+func SetDefaultPginationParam(pageParam, perPageParam, orderByParam, sortByParam string) (*PaginationParams, error) {
+	if !IsNumber(pageParam) {
+		return nil, fmt.Errorf("Page value is string, numeric needed")
+	}
+
+	if !IsNumber(perPageParam) {
+		return nil, fmt.Errorf("PerPage value is string, numeric needed")
+	}
+	page, err := strconv.Atoi(pageParam)
+	if err != nil {
+		page = 1
+	}
+	perPage, err := strconv.Atoi(perPageParam)
+	if err != nil {
+		perPage = 10
+	}
+	orderBy := orderByParam
+	if orderBy == "" {
+		orderBy = "created_at"
+	}
+	sortBy := sortByParam
+	if sortBy == "" {
+		sortBy = "desc"
+	}
+
+	result := &PaginationParams{
+		Page:    strconv.Itoa(page),
+		PerPage: int32(perPage),
+		OrderBy: orderBy,
+		SortBy:  sortBy,
+	}
+
+	return result, nil
 }
 
 // APIError represents response body for API on error.
@@ -77,7 +143,7 @@ func (a *API) Success(data interface{}, code int, message string) *APISuccess {
 	}
 }
 
-//SuccessResponseJSON setting response for success condition
+// SuccessResponseJSON setting response for success condition
 func SuccessResponseJSON(w http.ResponseWriter, statusCode int, data *APISuccess) error {
 	// If there is nothing to marshal then set status code and return.
 	if statusCode == http.StatusNoContent {
@@ -138,6 +204,7 @@ func (a *API) SuccessWithoutData(w http.ResponseWriter, code int, message string
 	}
 	SuccessResponseJSON(w, a.statusCode, response)
 }
+
 // ============================= ======================= ===================================
 
 // ============================== HANDLE ERROR RESPONSE ====================================
@@ -152,7 +219,7 @@ func (a *API) Error(code int, message string) *APIError {
 	}
 }
 
-//ErrorResponseJSON setting response for error condition
+// ErrorResponseJSON setting response for error condition
 func ErrorResponseJSON(w http.ResponseWriter, statusCode int, data *APIError) error {
 	// If there is nothing to marshal then set status code and return.
 	if statusCode == http.StatusNoContent {
@@ -214,6 +281,7 @@ func (a *API) ErrorWithStatusCode(w http.ResponseWriter, code int, message strin
 
 	ErrorResponseJSON(w, a.statusCode, response)
 }
+
 // ============================= ======================= ===================================
 
 // ============================= HANDLE FAILURE RESPONSE ===================================
@@ -229,7 +297,7 @@ func (a *API) Failure(err error, code int) *APIFailure {
 	}
 }
 
-//FailureResponseJSON setting response for failure condition
+// FailureResponseJSON setting response for failure condition
 func FailureResponseJSON(w http.ResponseWriter, statusCode int, data *APIFailure) error {
 	// If there is nothing to marshal then set status code and return.
 	if statusCode == http.StatusNoContent {
@@ -270,6 +338,7 @@ func (a *API) FailureJSON(w http.ResponseWriter, err error, code int) {
 
 	FailureResponseJSON(w, a.statusCode, response)
 }
+
 // ============================= ======================= ===================================
 
 // Error implements error interface.
