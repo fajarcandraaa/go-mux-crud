@@ -7,7 +7,7 @@ import (
 	"github.com/fajarcandraaa/go-mux-crud/entity/userentity"
 	"github.com/fajarcandraaa/go-mux-crud/helpers"
 	"github.com/fajarcandraaa/go-mux-crud/helpers/errorcodehandling"
-	"github.com/fajarcandraaa/go-mux-crud/repositories"
+	repositories "github.com/fajarcandraaa/go-mux-crud/model"
 	"github.com/google/uuid"
 )
 
@@ -73,4 +73,39 @@ func (s *service) FindUser(ctx context.Context, userID string) (*userentity.Find
 	}
 
 	return &resultUser, nil
+}
+
+func (s *service) GetListUsers(ctx context.Context, sortBy, orderBy string, perPage, page int) (*[]userentity.Users, int64, error) {
+	users, total, err := s.repo.User.ListUser(sortBy, orderBy, perPage, page)
+	if err != nil {
+		return nil, 0, err
+	}
+
+	return users, total, nil
+}
+
+func (s *service) UpdateUser(ctx context.Context, payload *userentity.UserData) (*userentity.UserData, error) {
+	user, err := s.repo.User.FindUserByID(ctx, payload.ID)
+	if err != nil {
+		return nil, err
+	}
+
+	userdata := userentity.SetParameterUpdateUser(user, payload)
+
+	updateUser, err := s.repo.User.UpdateUserData(ctx, payload.ID, userdata)
+	if err != nil {
+		return nil, err
+	}
+
+	return updateUser, nil
+}
+
+func (s *service) DeleteDataUser(ctx context.Context, userID string) error {
+
+	err := s.repo.User.DeleteUser(ctx, userID)
+	if err != nil {
+		return err
+	}
+
+	return nil
 }

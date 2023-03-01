@@ -1,4 +1,4 @@
-package userrepo
+package usermodel
 
 import (
 	"github.com/fajarcandraaa/go-mux-crud/helpers/errorcodehandling"
